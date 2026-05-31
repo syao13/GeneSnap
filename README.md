@@ -1,4 +1,4 @@
-# SNP Analyzer
+# Genesnap
 
 A web application that parses raw 23andMe genetic data, identifies clinically significant SNP variants, and provides annotated results linked to scientific literature and databases.
 
@@ -34,7 +34,7 @@ cp ../.env.example .env
 # Edit .env and set NCBI_API_KEY (optional but recommended for higher API rate limits)
 
 # Start the dev server
-uv run uvicorn snp_analyzer.main:app --reload --port 8000
+uv run uvicorn genesnap.main:app --reload --port 8000
 ```
 
 The API will be available at http://localhost:8000.

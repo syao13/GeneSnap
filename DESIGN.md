@@ -1,8 +1,8 @@
-# SNP Analyzer - Design Document
+# Genesnap - Design Document
 
 ## 1. Project Overview
 
-**SNP Analyzer** is a web application that parses raw genetic testing data (starting with 23andMe), identifies clinically significant SNP variants, and provides annotated results with links to scientific literature and databases.
+**Genesnap** is a web application that parses raw genetic testing data (starting with 23andMe), identifies clinically significant SNP variants, and provides annotated results with links to scientific literature and databases.
 
 ### Goals
 - Upload and parse 23andMe raw data files (~577K-967K SNPs depending on chip version)
@@ -104,7 +104,7 @@ backend/
 ├── pyproject.toml              # uv project config, dependencies, ruff/mypy config
 ├── uv.lock
 ├── src/
-│   └── snp_analyzer/
+│   └── genesnap/
 │       ├── __init__.py
 │       ├── main.py             # FastAPI app entry point, CORS, lifespan
 │       ├── config.py           # Settings (API keys, DB path, etc.)
@@ -137,7 +137,7 @@ backend/
 │           └── schemas.py      # Pydantic models for API request/response
 ├── data/
 │   ├── curated_variants.sql    # SQL to create + populate variant tables
-│   └── snp_analyzer.db         # SQLite database (generated, gitignored)
+│   └── genesnap.db             # SQLite database (generated, gitignored)
 └── tests/
     ├── __init__.py
     ├── conftest.py             # Shared fixtures (test DB, sample data, async client)
@@ -351,7 +351,7 @@ frontend/
 
 ```
 ┌────────────────────────────────────────────────────────┐
-│  SNP Analyzer                                          │
+│  Genesnap                                              │
 ├────────────────────────────────────────────────────────┤
 │                                                        │
 │  ┌──────────┐  ┌──────────┐  ┌──────────┐             │

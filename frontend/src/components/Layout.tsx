@@ -9,9 +9,9 @@ export default function Layout({ children }: LayoutProps) {
         <div className="max-w-6xl mx-auto px-4 py-4">
           <div className="flex items-center gap-3">
             <div className="w-8 h-8 bg-indigo-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-sm">S</span>
+              <span className="text-white font-bold text-sm">G</span>
             </div>
-            <h1 className="text-xl font-semibold text-gray-900">SNP Analyzer</h1>
+            <h1 className="text-xl font-semibold text-gray-900">Genesnap</h1>
           </div>
         </div>
       </header>
