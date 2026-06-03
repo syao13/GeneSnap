@@ -11,14 +11,20 @@ from genesnap.db.variants import GENOTYPE_INTERPRETATIONS, VARIANTS
 TODAY = date.today().isoformat()
 
 
-def seed_database(db_path: Path) -> None:
-    """Create and seed the database with curated variants."""
+def seed_database(db_path: Path, force: bool = False) -> None:
+    """Create and seed the database with curated variants.
+
+    Args:
+        db_path: Path to the SQLite database file.
+        force: If True, use INSERT OR REPLACE (overwrites existing rows).
+               Default False uses INSERT OR IGNORE (preserves existing rows).
+    """
     db_path.parent.mkdir(parents=True, exist_ok=True)
     conn = sqlite3.connect(db_path)
     conn.executescript(SCHEMA_SQL)
 
-    _insert_variants(conn)
-    _insert_genotype_interpretations(conn)
+    _insert_variants(conn, force=force)
+    _insert_genotype_interpretations(conn, force=force)
 
     conn.commit()
     conn.close()
@@ -29,11 +35,11 @@ def seed_database(db_path: Path) -> None:
     print(f"Seeded {count} variants into {db_path}")
 
 
-def _insert_variants(conn: sqlite3.Connection) -> None:
-    """Insert all curated variants."""
+def _insert_variants(conn: sqlite3.Connection, force: bool = False) -> None:
+    op = "INSERT OR REPLACE" if force else "INSERT OR IGNORE"
     for v in VARIANTS:
         conn.execute(
-            """INSERT OR REPLACE INTO variants
+            f"""{op} INTO variants
             (rsid, gene, category, name, significance, description,
              risk_allele, normal_allele, chromosome, position, source,
              external_ids, publications, clinvar_stars, odds_ratio, last_updated)
@@ -59,11 +65,11 @@ def _insert_variants(conn: sqlite3.Connection) -> None:
         )
 
 
-def _insert_genotype_interpretations(conn: sqlite3.Connection) -> None:
-    """Insert genotype interpretations for all variants."""
+def _insert_genotype_interpretations(conn: sqlite3.Connection, force: bool = False) -> None:
+    op = "INSERT OR REPLACE" if force else "INSERT OR IGNORE"
     for interp in GENOTYPE_INTERPRETATIONS:
         conn.execute(
-            """INSERT OR REPLACE INTO genotype_interpretations
+            f"""{op} INTO genotype_interpretations
             (rsid, genotype, interpretation, risk_level)
             VALUES (?, ?, ?, ?)""",
             (interp["rsid"], interp["genotype"], interp["interpretation"], interp["risk_level"]),
@@ -71,6 +77,15 @@ def _insert_genotype_interpretations(conn: sqlite3.Connection) -> None:
 
 
 if __name__ == "__main__":
+    import argparse
+
     from genesnap.config import settings
 
-    seed_database(settings.db_path)
+    parser = argparse.ArgumentParser(description="Seed the curated variant database.")
+    parser.add_argument(
+        "--force",
+        action="store_true",
+        help="Overwrite existing rows (INSERT OR REPLACE). Default is INSERT OR IGNORE.",
+    )
+    args = parser.parse_args()
+    seed_database(settings.db_path, force=args.force)
