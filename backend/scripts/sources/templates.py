@@ -122,7 +122,7 @@ def gwas_interpretations(
     if pval is not None and pval > 0:
         exp = floor(log10(pval))
         mantissa = pval / (10**exp)
-        pval_str = f"{mantissa:.1f}×10⁻{abs(exp)}"
+        pval_str = f"{mantissa:.1f}×10⁻{abs(exp)}"  # noqa: RUF001
     else:
         pval_str = "unknown"
 
