@@ -1,0 +1,15 @@
+##fileformat=VCFv4.1
+##INFO=<ID=CLNSIG,Number=.,Type=String,Description="Clinical significance">
+##INFO=<ID=CLNREVSTAT,Number=.,Type=String,Description="Review status">
+##INFO=<ID=CLNDN,Number=.,Type=String,Description="Disease name">
+##INFO=<ID=GENEINFO,Number=1,Type=String,Description="Gene info">
+##INFO=<ID=RS,Number=1,Type=Integer,Description="dbSNP ID">
+#CHROM	POS	ID	REF	ALT	QUAL	FILTER	INFO
+1	169519049	929301	G	A	.	.	RS=6025;CLNSIG=Pathogenic;CLNREVSTAT=reviewed_by_expert_panel;CLNDN=Thrombophilia_due_to_activated_protein_C_resistance;GENEINFO=F5:2153
+17	41276045	17661	G	A	.	.	RS=80357906;CLNSIG=Pathogenic;CLNREVSTAT=practice_guideline;CLNDN=Hereditary_breast_and_ovarian_cancer_syndrome;GENEINFO=BRCA1:672
+10	96702047	12345	C	T	.	.	RS=1799853;CLNSIG=drug_response;CLNREVSTAT=criteria_provided,_multiple_submitters,_no_conflicts;CLNDN=Warfarin_response;GENEINFO=CYP2C9:1559
+1	1000000	99999	G	A	.	.	RS=9999999;CLNSIG=Pathogenic;CLNREVSTAT=criteria_provided,_single_submitter;CLNDN=Some_disease;GENEINFO=GENE1:12345
+1	2000000	88888	G	A	.	.	RS=8888888;CLNSIG=Conflicting_interpretations_of_pathogenicity;CLNREVSTAT=criteria_provided,_multiple_submitters,_no_conflicts;CLNDN=Some_disease;GENEINFO=GENE2:12346
+1	3000000	77777	G	A	.	.	CLNSIG=Pathogenic;CLNREVSTAT=reviewed_by_expert_panel;CLNDN=Some_disease;GENEINFO=GENE3:12347
+X	154931326	55555	G	A	.	.	RS=5978;CLNSIG=Pathogenic;CLNREVSTAT=reviewed_by_expert_panel;CLNDN=Hemophilia_B;GENEINFO=F9:2158
+17	7577538	44444	C	T	.	.	RS=63750447;CLNSIG=Pathogenic;CLNREVSTAT=practice_guideline;CLNDN=Li-Fraumeni_syndrome|not_provided;GENEINFO=TP53:7157
