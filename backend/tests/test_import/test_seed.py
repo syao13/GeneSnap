@@ -1,20 +1,9 @@
 """Tests for seed.py INSERT OR IGNORE / force behaviour."""
 
-import json
 import sqlite3
 from pathlib import Path
 
-import pytest
-
-from genesnap.db.connection import SCHEMA_SQL
 from genesnap.db.seed import seed_database
-
-
-def _make_db() -> sqlite3.Connection:
-    conn = sqlite3.connect(":memory:")
-    conn.executescript(SCHEMA_SQL)
-    conn.commit()
-    return conn
 
 
 def test_seed_does_not_overwrite_existing_variant(tmp_path: Path) -> None:
@@ -55,4 +44,4 @@ def test_seed_force_overwrites_existing_variant(tmp_path: Path) -> None:
     row = conn.execute("SELECT description FROM variants WHERE rsid = 'rs429358'").fetchone()
     conn.close()
     assert row is not None
-    assert row[0] != "SENTINEL"
+    assert row[0].startswith("One of two SNPs")
