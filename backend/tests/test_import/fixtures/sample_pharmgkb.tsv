@@ -1,0 +1,6 @@
+Clinical Annotation ID	Variant/Haplotypes	Gene	Level of Evidence	Level Override	Level Modifiers	Score	Phenotype Category	PMID(s)	Evidence Count	Drug(s)	Phenotype(s)	Notes	Specialty Population	Latest History Date (YYYY-MM-DD)	URL
+1001	rs4244285	CYP2C19	1A			10.0	Efficacy	20802479	25	clopidogrel	Reduced Function		NA	2023-01-01	https://www.pharmgkb.org/clinicalAnnotation/1001
+1002	CYP2D6*4	CYP2D6	1A			9.0	Efficacy	16958828	30	codeine	Poor Metabolizer		NA	2023-01-01	https://www.pharmgkb.org/clinicalAnnotation/1002
+1003	rs1799853	CYP2C9	1B			8.0	Dosage	9399854	20	warfarin	Decreased Metabolism		NA	2023-01-01	https://www.pharmgkb.org/clinicalAnnotation/1003
+1004	CYP2D6*99	CYP2D6	1A			7.0	Efficacy	99999999	5	codeine	Unknown		NA	2023-01-01	https://www.pharmgkb.org/clinicalAnnotation/1004
+1005	rs7412	APOE	2A			5.0	Efficacy	7842013	15	statins	Altered Response		NA	2023-01-01	https://www.pharmgkb.org/clinicalAnnotation/1005
