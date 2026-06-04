@@ -1,7 +1,10 @@
-import { memo, useCallback, useState } from 'react'
+import { memo, useCallback, useEffect, useState } from 'react'
 import type { VariantMatch } from '../types'
+import Pagination from './Pagination'
 import RiskBadge from './RiskBadge'
 import VariantDetail from './VariantDetail'
+
+const PAGE_SIZE = 100
 
 interface VariantTableProps {
   matches: VariantMatch[]
@@ -81,6 +84,11 @@ const MobileCard = memo(function MobileCard({ match, isExpanded, onToggle }: Row
 
 export default function VariantTable({ matches, emptyMessage }: VariantTableProps) {
   const [expandedRsid, setExpandedRsid] = useState<string | null>(null)
+  const [page, setPage] = useState(1)
+
+  useEffect(() => {
+    setPage(1)
+  }, [matches])
 
   const handleToggle = useCallback((rsid: string) => {
     setExpandedRsid((prev) => (prev === rsid ? null : rsid))
@@ -93,6 +101,9 @@ export default function VariantTable({ matches, emptyMessage }: VariantTableProp
       </div>
     )
   }
+
+  const totalPages = Math.ceil(matches.length / PAGE_SIZE)
+  const pageMatches = matches.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   return (
     <>
@@ -119,7 +130,7 @@ export default function VariantTable({ matches, emptyMessage }: VariantTableProp
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-100">
-            {matches.map((match) => (
+            {pageMatches.map((match) => (
               <DesktopRow
                 key={match.snp.rsid}
                 match={match}
@@ -129,11 +140,12 @@ export default function VariantTable({ matches, emptyMessage }: VariantTableProp
             ))}
           </tbody>
         </table>
+        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
 
       {/* Mobile card layout (below md) */}
       <div className="md:hidden space-y-3">
-        {matches.map((match) => (
+        {pageMatches.map((match) => (
           <MobileCard
             key={match.snp.rsid}
             match={match}
@@ -141,6 +153,7 @@ export default function VariantTable({ matches, emptyMessage }: VariantTableProp
             onToggle={handleToggle}
           />
         ))}
+        <Pagination page={page} totalPages={totalPages} onPageChange={setPage} />
       </div>
     </>
   )
