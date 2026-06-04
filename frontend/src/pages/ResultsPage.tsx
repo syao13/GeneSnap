@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useMemo, useTransition, useState } from 'react'
 import DisclaimerBanner from '../components/DisclaimerBanner'
 import GeneticCounselingCard from '../components/GeneticCounselingCard'
 import SummaryCards from '../components/SummaryCards'
@@ -28,6 +28,7 @@ function hasPathogenicVariants(result: AnalysisResult): boolean {
 
 export default function ResultsPage({ result, onReset }: ResultsPageProps) {
   const [activeTab, setActiveTab] = useState<Tab>('health')
+  const [, startTransition] = useTransition()
 
   const tabData = {
     health: {
@@ -45,7 +46,7 @@ export default function ResultsPage({ result, onReset }: ResultsPageProps) {
   }
 
   const current = tabData[activeTab]
-  const showCounseling = hasPathogenicVariants(result)
+  const showCounseling = useMemo(() => hasPathogenicVariants(result), [result])
 
   return (
     <div className="space-y-6">
@@ -75,7 +76,7 @@ export default function ResultsPage({ result, onReset }: ResultsPageProps) {
           return (
             <button
               key={tab.key}
-              onClick={() => setActiveTab(tab.key)}
+              onClick={() => startTransition(() => setActiveTab(tab.key))}
               className={`px-5 py-2.5 rounded-lg text-sm font-semibold transition-all ${
                 isActive
                   ? 'bg-indigo-600 text-white shadow-sm'

@@ -14,6 +14,7 @@ import sqlite3
 import sys
 import tempfile
 import urllib.request
+import zipfile
 from datetime import date
 from pathlib import Path
 
@@ -25,7 +26,7 @@ from sources.gwas import parse_gwas_tsv
 from sources.pharmgkb import parse_pharmgkb_annotations
 
 CLINVAR_URL = "https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/clinvar.vcf.gz"
-GWAS_URL = "https://www.ebi.ac.uk/gwas/api/search/downloads/full"
+GWAS_URL = "https://ftp.ebi.ac.uk/pub/databases/gwas/releases/latest/gwas-catalog-associations-full.zip"
 STAR_ALLELES_PATH = Path(__file__).parent / "data" / "star_allele_rsids.json"
 
 TODAY = date.today().isoformat()
@@ -145,9 +146,17 @@ def main() -> None:
 
         # --- GWAS Catalog ---
         if not args.skip_gwas:
-            gwas_path = args.gwas_file or tmp / "gwas_catalog.tsv"
-            if not args.gwas_file:
-                _download(GWAS_URL, gwas_path)
+            gwas_path = args.gwas_file
+            if not gwas_path:
+                zip_path = tmp / "gwas_catalog.zip"
+                _download(GWAS_URL, zip_path)
+                print("  Extracting GWAS TSV from ZIP...")
+                with zipfile.ZipFile(zip_path) as zf:
+                    tsv_names = [n for n in zf.namelist() if n.endswith(".tsv")]
+                    if not tsv_names:
+                        raise RuntimeError("No TSV found inside GWAS ZIP")
+                    gwas_path = tmp / tsv_names[0]
+                    zf.extract(tsv_names[0], tmp)
 
             print("Parsing GWAS Catalog TSV...")
             variants_batch = []

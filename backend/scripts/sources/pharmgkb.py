@@ -24,10 +24,15 @@ def parse_pharmgkb_annotations(
     tsv_path: Path,
     star_allele_path: Path,
 ) -> Iterator[tuple[VariantDict, list[InterpretationDict]]]:
-    """Parse PharmGKB clinical_annotations.tsv, yielding Level 1A/1B variants.
+    """Parse PharmGKB clinical_annotations.tsv or clinicalVariants.tsv.
 
-    Star alleles are resolved to rsIDs via star_allele_rsids.json.
-    Unresolvable haplotypes are skipped with a printed warning.
+    Supports both column naming conventions:
+      - clinical_annotations.tsv: "Variant/Haplotypes", "Level of Evidence", "Drug(s)", "Phenotype(s)"
+      - clinicalVariants.tsv:     "variant",             "level of evidence", "chemicals",  "phenotypes"
+
+    Multi-allele rows (comma-separated star alleles like "CYP2C9*1, CYP2C9*3") are skipped —
+    these describe diplotypes rather than single variants. Only single rsIDs and single star
+    alleles are processed. Star alleles are resolved via star_allele_rsids.json.
     """
     star_alleles = _load_star_alleles(star_allele_path)
     seen_rsids: set[str] = set()
@@ -35,14 +40,28 @@ def parse_pharmgkb_annotations(
     with open(tsv_path, encoding="utf-8") as fh:
         reader = csv.DictReader(fh, delimiter="\t")
         for row in reader:
-            level = row.get("Level of Evidence", "").strip()
+            # Support both column naming conventions
+            level = (
+                row.get("Level of Evidence")
+                or row.get("level of evidence")
+                or ""
+            ).strip()
             if level not in ALLOWED_LEVELS:
                 continue
 
-            variant_field = row.get("Variant/Haplotypes", "").strip()
-            gene = row.get("Gene", "").strip()
-            drug = row.get("Drug(s)", "").strip().lower()
-            phenotype = row.get("Phenotype(s)", "").strip()
+            variant_field = (
+                row.get("Variant/Haplotypes")
+                or row.get("variant")
+                or ""
+            ).strip()
+            gene = row.get("Gene") or row.get("gene") or ""
+            gene = gene.strip()
+            drug = (row.get("Drug(s)") or row.get("chemicals") or "").strip().lower()
+            phenotype = (row.get("Phenotype(s)") or row.get("phenotypes") or "").strip()
+
+            # Skip multi-allele rows (diplotype descriptions like "CYP2C9*1, CYP2C9*3")
+            if "," in variant_field:
+                continue
 
             # Resolve rsID and alleles
             if variant_field.startswith("rs"):

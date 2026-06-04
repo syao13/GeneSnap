@@ -29,7 +29,8 @@ HEALTH_RISK_KEYWORDS = {
 
 
 def _parse_sample_size(s: str) -> int:
-    nums = [int(n.replace(",", "")) for n in re.findall(r"[\d,]+", s)]
+    stripped = [n.replace(",", "") for n in re.findall(r"[\d,]+", s)]
+    nums = [int(n) for n in stripped if n]
     return max(nums) if nums else 0
 
 
