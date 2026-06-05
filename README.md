@@ -1,4 +1,4 @@
-# Genesnap
+# GeneSnap
 
 A web application that parses raw 23andMe genetic data, identifies clinically significant SNP variants, and provides annotated results linked to scientific literature and databases.
 
