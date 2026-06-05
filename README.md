@@ -21,13 +21,36 @@ A web application that parses raw 23andMe genetic data, identifies clinically si
 
 ## Running Locally (Development)
 
-### 1. Backend
+### 1. Import the variant database
 
 ```bash
 cd backend
 
 # Install dependencies
 uv sync
+
+# Seed the schema
+uv run python -m genesnap.db.seed
+
+# Full import — downloads ClinVar and GWAS Catalog automatically, skips PharmGKB
+uv run scripts/import_variants.py
+
+# Optionally include PharmGKB (requires manual download from pharmgkb.org)
+uv run scripts/import_variants.py --pharmgkb path/to/clinical_annotations.tsv
+```
+
+| Source | Data | Filter applied |
+|--------|------|----------------|
+| [ClinVar](https://ftp.ncbi.nlm.nih.gov/pub/clinvar/vcf_GRCh37/) | Pathogenic / likely pathogenic / drug response variants | ≥ 2 ClinVar review stars, single rsID, no conflicting interpretations |
+| [GWAS Catalog](https://ftp.ebi.ac.uk/pub/databases/gwas/releases/latest/) | Genome-wide significant associations | p < 5×10⁻⁸, sample size ≥ 1,000, single rsID |
+| [PharmGKB](https://www.pharmgkb.org/downloads) | Drug–gene interactions | CPIC Level 1A / 1B only |
+
+> **Note:** PharmGKB does not provide open FTP access. Download `clinical_annotations.tsv` manually from their downloads page and pass it via `--pharmgkb`.
+
+### 2. Backend
+
+```bash
+cd backend
 
 # Copy and configure environment variables
 cp ../.env.example .env
@@ -40,7 +63,7 @@ uv run uvicorn genesnap.main:app --reload --port 8000
 The API will be available at http://localhost:8000.
 Interactive API docs (Swagger UI) are at http://localhost:8000/docs.
 
-### 2. Frontend
+### 3. Frontend
 
 ```bash
 cd frontend

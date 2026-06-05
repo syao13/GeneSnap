@@ -63,10 +63,7 @@ export default function VariantDetail({ match }: VariantDetailProps) {
             <span className="text-xs font-semibold text-gray-900">{variant.odds_ratio.toFixed(1)}x</span>
           </div>
         )}
-        <div className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-gray-200 rounded-md">
-          <span className="text-xs text-gray-500">Evidence Score:</span>
-          <span className="text-xs font-semibold text-indigo-700">{match.score}</span>
-        </div>
+
       </div>
 
       {match.publications.length > 0 && (

@@ -20,26 +20,23 @@ interface RowProps {
 const DesktopRow = memo(function DesktopRow({ match, isExpanded, onToggle }: RowProps) {
   return (
     <tr className="group">
-      <td colSpan={5} className="p-0">
+      <td colSpan={4} className="p-0">
         <button
           onClick={() => onToggle(match.snp.rsid)}
           className="w-full text-left hover:bg-gray-50 transition-colors"
         >
           <div className="flex items-center">
-            <div className="px-6 py-4 w-1/6">
+            <div className="px-6 py-4 w-1/5">
               <span className="font-medium text-gray-900">{match.variant.gene}</span>
               <span className="block text-xs text-gray-400 font-mono">{match.snp.rsid}</span>
             </div>
-            <div className="px-6 py-4 w-1/3">
+            <div className="px-6 py-4 w-2/5">
               <span className="text-sm text-gray-700">{match.variant.name}</span>
             </div>
-            <div className="px-6 py-4 w-1/6">
+            <div className="px-6 py-4 w-1/5">
               <span className="font-mono text-sm font-bold text-gray-900">{match.snp.genotype}</span>
             </div>
-            <div className="px-6 py-4 w-1/6">
-              <ScoreBadge score={match.score} />
-            </div>
-            <div className="px-6 py-4 w-1/6">
+            <div className="px-6 py-4 w-1/5">
               <RiskBadge level={match.risk_level} />
             </div>
           </div>
@@ -72,9 +69,7 @@ const MobileCard = memo(function MobileCard({ match, isExpanded, onToggle }: Row
             Genotype:{' '}
             <span className="font-mono font-bold text-gray-900">{match.snp.genotype}</span>
           </div>
-          <div className="text-xs text-gray-500">
-            Score: <ScoreBadge score={match.score} />
-          </div>
+
         </div>
       </button>
       {isExpanded && <VariantDetail match={match} />}
@@ -112,19 +107,16 @@ export default function VariantTable({ matches, emptyMessage }: VariantTableProp
         <table className="w-full">
           <thead>
             <tr className="bg-gray-50 border-b border-gray-200">
-              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
                 Gene
               </th>
-              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-2/5">
                 Variant
               </th>
-              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
                 Your Genotype
               </th>
-              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Score
-              </th>
-              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider">
+              <th className="text-left px-6 py-3 text-xs font-medium text-gray-500 uppercase tracking-wider w-1/5">
                 Risk Level
               </th>
             </tr>
@@ -159,20 +151,3 @@ export default function VariantTable({ matches, emptyMessage }: VariantTableProp
   )
 }
 
-function ScoreBadge({ score }: { score: number }) {
-  const getColor = () => {
-    if (score >= 100) return 'bg-red-100 text-red-800 border-red-200'
-    if (score >= 40) return 'bg-orange-100 text-orange-800 border-orange-200'
-    if (score >= 15) return 'bg-yellow-100 text-yellow-800 border-yellow-200'
-    return 'bg-gray-100 text-gray-700 border-gray-200'
-  }
-
-  return (
-    <span
-      className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-semibold border ${getColor()}`}
-      title="Composite evidence score based on clinical significance, review confidence, and effect size"
-    >
-      {score}
-    </span>
-  )
-}
