@@ -36,7 +36,7 @@ uv run python -m genesnap.db.seed
 uv run scripts/import_variants.py
 
 # Optionally include PharmGKB (requires manual download from pharmgkb.org)
-uv run scripts/import_variants.py --pharmgkb path/to/clinical_annotations.tsv
+uv run scripts/import_variants.py --pharmgkb data/clinical_annotations.tsv
 ```
 
 | Source | Data | Filter applied |
@@ -45,7 +45,7 @@ uv run scripts/import_variants.py --pharmgkb path/to/clinical_annotations.tsv
 | [GWAS Catalog](https://ftp.ebi.ac.uk/pub/databases/gwas/releases/latest/) | Genome-wide significant associations | p < 5×10⁻⁸, sample size ≥ 1,000, single rsID |
 | [PharmGKB](https://www.pharmgkb.org/downloads) | Drug–gene interactions | CPIC Level 1A / 1B only |
 
-> **Note:** PharmGKB does not provide open FTP access. Download `clinical_annotations.tsv` manually from their downloads page and pass it via `--pharmgkb`.
+> **Note:** PharmGKB does not provide open FTP access. Download `clinical_annotations.tsv` manually from their downloads page or use the one under 'backend/data', and pass it via `--pharmgkb`. 
 
 ### 2. Backend
 
