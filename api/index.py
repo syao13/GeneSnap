@@ -15,6 +15,8 @@ if not os.path.exists(_TMP_DB):
         )
     shutil.copy2(_BUNDLED_DB, _TMP_DB)
 
+os.environ.setdefault("DB_PATH", _TMP_DB)
+
 from genesnap.main import app  # noqa: E402
 from mangum import Mangum  # noqa: E402
 
