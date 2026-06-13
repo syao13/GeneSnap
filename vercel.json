@@ -1,5 +1,5 @@
 {
-  "buildCommand": "pip install -r api/requirements.txt && PYTHONPATH=./backend/src DB_PATH=./api/genesnap.db python -m genesnap.db.seed && cd frontend && npm ci && npm run build",
+  "buildCommand": "uv pip install --system -r api/requirements.txt && PYTHONPATH=./backend/src DB_PATH=./api/genesnap.db python -m genesnap.db.seed && cd frontend && npm ci && npm run build",
   "outputDirectory": "frontend/dist",
   "functions": {
     "api/index.py": {
