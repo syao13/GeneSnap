@@ -53,7 +53,7 @@ async def fetch_clinvar(rsid: str) -> ClinVarResult | None:
     if settings.ncbi_api_key:
         params["api_key"] = settings.ncbi_api_key
 
-    async with httpx.AsyncClient(timeout=15.0) as client:
+    async with httpx.AsyncClient(timeout=8.0) as client:
         # Step 1: Search for the variant
         search_resp = await client.get(ESEARCH_URL, params=params)
         search_resp.raise_for_status()

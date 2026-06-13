@@ -48,7 +48,7 @@ async def fetch_gwas_associations(rsid: str, max_results: int = 5) -> list[GWASA
     """
     url = f"{GWAS_API_BASE}/singleNucleotidePolymorphisms/{rsid}/associations"
 
-    async with httpx.AsyncClient(timeout=15.0) as client:
+    async with httpx.AsyncClient(timeout=8.0) as client:
         resp = await client.get(url, headers={"Accept": "application/json"})
         if resp.status_code == 404:
             return []

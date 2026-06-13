@@ -52,7 +52,7 @@ async def fetch_pubmed_by_pmids(pmids: list[str]) -> list[PubMedArticle]:
     if settings.ncbi_api_key:
         params["api_key"] = settings.ncbi_api_key
 
-    async with httpx.AsyncClient(timeout=15.0) as client:
+    async with httpx.AsyncClient(timeout=8.0) as client:
         resp = await client.get(ESUMMARY_URL, params=params)
         resp.raise_for_status()
         data = resp.json()
@@ -104,7 +104,7 @@ async def search_pubmed_for_variant(rsid: str, max_results: int = 5) -> list[Pub
     if settings.ncbi_api_key:
         search_params["api_key"] = settings.ncbi_api_key
 
-    async with httpx.AsyncClient(timeout=15.0) as client:
+    async with httpx.AsyncClient(timeout=8.0) as client:
         search_resp = await client.get(ESEARCH_URL, params=search_params)
         search_resp.raise_for_status()
         search_data = search_resp.json()
