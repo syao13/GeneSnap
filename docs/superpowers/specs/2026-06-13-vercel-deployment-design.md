@@ -29,11 +29,18 @@ Browser
                                                     (seeded on cold start)
 ```
 
-Local dev (unchanged):
+Local dev — two modes, both unchanged:
 ```
+# Docker (full stack)
 docker compose up
   ├── frontend (nginx :3000) — proxies /api/* to backend:8000
   └── backend  (uvicorn :8000) — reads /app/data/genesnap.db
+
+# Dev server (faster iteration)
+cd backend && uv run uvicorn genesnap.main:app --reload   # :8000
+cd frontend && npm run dev                                # :5173
+  └── Vite proxy: /api/* → localhost:8000 (vite.config.ts)
+  └── CORS: config.py default includes http://localhost:5173 ✓
 ```
 
 ## File Changes
