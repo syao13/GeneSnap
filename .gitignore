@@ -21,6 +21,7 @@ backend/build/
 backend/dist/
 backend/wheels/
 backend/data/*.db
+api/genesnap.db
 
 # ── Environment ──────────────────────────────────────────────────────────────
 .env
