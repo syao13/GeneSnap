@@ -20,12 +20,26 @@ export async function uploadFile(file: File): Promise<AnalysisResult> {
 }
 
 export async function enrichVariant(rsid: string): Promise<EnrichmentResult> {
-  const response = await fetch(`${BASE_URL}/enrich/${rsid}`)
+  const controller = new AbortController()
+  const timeoutId = setTimeout(() => controller.abort(), 9000)
 
-  if (!response.ok) {
-    const text = await response.text()
-    throw new Error(`Enrichment failed (${response.status}): ${text}`)
+  try {
+    const response = await fetch(`${BASE_URL}/enrich/${rsid}`, {
+      signal: controller.signal,
+    })
+
+    if (!response.ok) {
+      const text = await response.text()
+      throw new Error(`Enrichment failed (${response.status}): ${text}`)
+    }
+
+    return response.json()
+  } catch (err) {
+    if (err instanceof Error && err.name === 'AbortError') {
+      throw new Error('Enrichment is taking too long — please try again')
+    }
+    throw err
+  } finally {
+    clearTimeout(timeoutId)
   }
-
-  return response.json()
 }
