@@ -23,6 +23,9 @@ backend/wheels/
 backend/data/*.db
 api/genesnap.db
 
+# ── Internal tooling ─────────────────────────────────────────────────────────
+docs/superpowers/
+
 # ── Environment ──────────────────────────────────────────────────────────────
 .env
 
