@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import DisclaimerBanner from '../components/DisclaimerBanner'
 import FileUpload from '../components/FileUpload'
 
@@ -9,6 +10,20 @@ interface HomePageProps {
 }
 
 export default function HomePage({ onFileSelected, isUploading, error, onClearError }: HomePageProps) {
+  const [loadingSample, setLoadingSample] = useState(false)
+
+  async function handleTrySample() {
+    setLoadingSample(true)
+    try {
+      const res = await fetch('/sample_23andme.txt')
+      const blob = await res.blob()
+      const file = new File([blob], 'sample_23andme.txt', { type: 'text/plain' })
+      onFileSelected(file)
+    } finally {
+      setLoadingSample(false)
+    }
+  }
+
   return (
     <div className="max-w-2xl mx-auto space-y-8">
       <div className="text-center space-y-3">
@@ -20,6 +35,27 @@ export default function HomePage({ onFileSelected, isUploading, error, onClearEr
       </div>
 
       <FileUpload onFileSelected={onFileSelected} isUploading={isUploading} />
+
+      <div className="text-center space-y-2">
+        <p className="text-sm text-gray-500">Don't have a 23andMe file?</p>
+        <div className="flex items-center justify-center gap-4">
+          <button
+            onClick={handleTrySample}
+            disabled={loadingSample || isUploading}
+            className="text-sm font-medium text-indigo-600 hover:text-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+          >
+            {loadingSample ? 'Loading…' : 'Try sample file →'}
+          </button>
+          <span className="text-gray-300">|</span>
+          <a
+            href="/sample_23andme.txt"
+            download="sample_23andme.txt"
+            className="text-sm text-gray-500 hover:text-gray-700 transition-colors"
+          >
+            Download sample
+          </a>
+        </div>
+      </div>
 
       {error && (
         <div className="bg-red-50 border border-red-200 rounded-lg px-4 py-3 flex items-center justify-between">
