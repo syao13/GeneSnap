@@ -2,9 +2,15 @@ import type { AnalysisResult, EnrichmentResult } from '../types'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
+async function compressFile(file: File): Promise<Blob> {
+  const stream = file.stream().pipeThrough(new CompressionStream('gzip'))
+  return new Response(stream).blob()
+}
+
 export async function uploadFile(file: File): Promise<AnalysisResult> {
+  const compressed = await compressFile(file)
   const formData = new FormData()
-  formData.append('file', file)
+  formData.append('file', compressed, file.name)
 
   const response = await fetch(`${BASE_URL}/upload`, {
     method: 'POST',
