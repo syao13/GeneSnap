@@ -4,13 +4,15 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL || '/api'
 
 async function compressFile(file: File): Promise<Blob> {
   const text = await file.text()
-  // Strip internal 23andMe IDs (i-prefix) — the parser ignores them anyway.
-  // This cuts file size ~40% before gzip, keeping uploads under Vercel's 4.5MB limit.
-  const filtered = text
-    .split('\n')
-    .filter(line => line.startsWith('#') || line.startsWith('rs'))
-    .join('\n')
-  const stream = new Blob([filtered]).stream().pipeThrough(new CompressionStream('gzip'))
+  // Strip to rsid+genotype only — drops i-prefix IDs, chromosome, and position
+  // (~75% size reduction before gzip). Backend detects this compact 2-column format.
+  const lines = text.split('\n').flatMap(line => {
+    if (line.startsWith('#')) return [line]
+    if (!line.startsWith('rs')) return []
+    const parts = line.split('\t')
+    return parts.length >= 4 ? [`${parts[0]}\t${parts[3]}`] : []
+  })
+  const stream = new Blob([lines.join('\n')]).stream().pipeThrough(new CompressionStream('gzip'))
   return new Response(stream).blob()
 }
 
