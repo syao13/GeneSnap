@@ -1,5 +1,5 @@
 {
-  "buildCommand": "PYTHONPATH=./backend/src DB_PATH=./api/genesnap.db uv run --no-project --with aiosqlite --with pydantic-settings python -m genesnap.db.seed && cd frontend && npm ci && npm run build",
+  "buildCommand": "wget -q https://github.com/syao13/GeneSnap/releases/download/db-v1/genesnap.db -O api/genesnap.db && cd frontend && npm ci && npm run build",
   "outputDirectory": "frontend/dist",
   "functions": {
     "api/index.py": {
