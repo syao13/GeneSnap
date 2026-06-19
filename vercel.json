@@ -1,5 +1,5 @@
 {
-  "buildCommand": "wget -q https://github.com/syao13/GeneSnap/releases/download/db-v1/genesnap.db -O api/genesnap.db && cd frontend && npm ci && npm run build",
+  "buildCommand": "curl -fsSL https://github.com/syao13/GeneSnap/releases/download/db-v1/genesnap.db -o api/genesnap.db && cd frontend && npm ci && npm run build",
   "outputDirectory": "frontend/dist",
   "functions": {
     "api/index.py": {
