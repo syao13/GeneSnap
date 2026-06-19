@@ -38,6 +38,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 # ── Frontend-specific ────────────────────────────────────────────────────────
+node_modules/
 frontend/node_modules/
 frontend/dist/
 frontend/dist-ssr/

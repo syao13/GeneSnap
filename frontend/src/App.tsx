@@ -1,3 +1,4 @@
+import { Analytics } from '@vercel/analytics/react'
 import { useCallback, useEffect, useState } from 'react'
 import { uploadFile } from './api/client'
 import ErrorBoundary from './components/ErrorBoundary'
@@ -42,6 +43,7 @@ export default function App() {
 
   return (
     <ErrorBoundary>
+      <Analytics />
       <Layout>
         {result ? (
           <ResultsPage result={result} onReset={handleReset} />
